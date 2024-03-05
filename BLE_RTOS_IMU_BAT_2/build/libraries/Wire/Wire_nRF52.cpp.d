@@ -1,4 +1,4 @@
-c:\Users\uqcwan34\OneDrive\ -\ The\ University\ of\ Queensland\Documents\GitHub\Smart_orthotics_hardware\BLE_RTOS_IMU_BAT_1\build\libraries\Wire\Wire_nRF52.cpp.o: \
+C:\Users\uqcwan34\OneDrive\ -\ The\ University\ of\ Queensland\Documents\GitHub\Seeed_BLE_IMU\BLE_RTOS_IMU_BAT_2\build\libraries\Wire\Wire_nRF52.cpp.o: \
  C:\Users\uqcwan34\AppData\Local\Arduino15\packages\Seeeduino\hardware\nrf52\1.1.8\libraries\Wire\Wire_nRF52.cpp \
  C:\Users\uqcwan34\AppData\Local\Arduino15\packages\Seeeduino\hardware\nrf52\1.1.8\cores\nRF5/Arduino.h \
  C:\Users\uqcwan34\AppData\Local\Arduino15\packages\Seeeduino\hardware\nrf52\1.1.8\cores\nRF5/avr/pgmspace.h \

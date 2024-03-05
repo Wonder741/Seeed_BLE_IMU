@@ -1,4 +1,4 @@
-#line 1 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\.vscode\\c_cpp_properties.json"
+#line 1 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\.vscode\\c_cpp_properties.json"
 {
     "version": 4,
     "configurations": [
@@ -43,16 +43,16 @@
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_TinyUSB_Arduino\\src\\arduino",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\cores\\nRF5",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\variants\\Seeed_XIAO_nRF52840",
-                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3-master",
-                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src",
-                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO",
-                "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Bluefruit52Lib\\src",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_nRFCrypto\\src",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_TinyUSB_Arduino\\src",
-                "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI",
+                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src",
+                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO",
+                "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire",
+                "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_LittleFS\\src",
                 "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\InternalFileSytem\\src",
+                "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI",
                 "c:\\users\\uqcwan34\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\9-2019q4\\arm-none-eabi\\include\\c++\\9.2.1",
                 "c:\\users\\uqcwan34\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\9-2019q4\\arm-none-eabi\\include\\c++\\9.2.1\\arm-none-eabi",
                 "c:\\users\\uqcwan34\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\9-2019q4\\arm-none-eabi\\include\\c++\\9.2.1\\backward",

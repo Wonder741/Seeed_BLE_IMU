@@ -10,107 +10,42 @@
     "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\variants\\Seeed_XIAO_nRF52840"
   },
   {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
-    "Include": "LSM6DS3.h",
-    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3-master"
-  },
-  {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
-    "Include": "RTClib.h",
-    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src"
-  },
-  {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
-    "Include": "Adafruit_I2CDevice.h",
-    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO"
-  },
-  {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
-    "Include": "Wire.h",
-    "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire"
-  },
-  {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
     "Include": "bluefruit.h",
     "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Bluefruit52Lib\\src"
   },
   {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
     "Include": "Adafruit_nRFCrypto.h",
     "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_nRFCrypto\\src"
   },
   {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
     "Include": "Adafruit_TinyUSB.h",
     "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Adafruit_TinyUSB_Arduino\\src"
   },
   {
-    "Sourcefile": "c:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\build\\sketch\\BLE_RTOS_IMU_BAT_1.ino.cpp",
-    "Include": "",
-    "Includepath": null
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
+    "Include": "RTClib.h",
+    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src"
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3-master\\LSM6DS3.cpp",
-    "Include": "SPI.h",
-    "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI"
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
+    "Include": "Adafruit_I2CDevice.h",
+    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO"
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3-master\\LSM6DS3.cpp",
-    "Include": "",
-    "Includepath": null
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
+    "Include": "Wire.h",
+    "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire"
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS1307.cpp",
-    "Include": "",
-    "Includepath": null
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
+    "Include": "LSM6DS3.h",
+    "Includepath": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3"
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS3231.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Micros.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Millis.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8523.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8563.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTClib.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp",
-    "Include": "",
-    "Includepath": null
-  },
-  {
-    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire\\Wire_nRF52.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\build\\sketch\\BLE_RTOS_IMU_BAT_2.ino.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -495,12 +430,67 @@
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI\\SPI.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS1307.cpp",
     "Include": "",
     "Includepath": null
   },
   {
-    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI\\SPI_nrf52832.cpp",
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_DS3231.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Micros.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_Millis.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8523.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTC_PCF8563.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\RTClib\\src\\RTClib.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
+    "Include": "SPI.h",
+    "Includepath": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI"
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\Wire\\Wire_nRF52.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\Arduino\\libraries\\Seeed_Arduino_LSM6DS3\\LSM6DS3.cpp",
     "Include": "",
     "Includepath": null
   },
@@ -536,6 +526,16 @@
   },
   {
     "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\InternalFileSytem\\src\\flash\\flash_nrf5x.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI\\SPI.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\uqcwan34\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\nrf52\\1.1.8\\libraries\\SPI\\SPI_nrf52832.cpp",
     "Include": "",
     "Includepath": null
   }

@@ -1,15 +1,12 @@
-# 1 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
-# 2 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 2
+# 1 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
+# 2 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 2
+# 3 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 2
+# 4 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 2
+# 5 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 2
+# 6 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 2
 
-# 4 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 2
-
-# 6 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 2
-# 7 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 2
-# 8 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 2
-
-// Define battery
-
-
+//Device name
+String deviceName = "IMU2";
 
 //************************ Signal ************************
 // Base frequency for D8
@@ -18,13 +15,16 @@ const int baseFrequency = 1024 / 8; // One frame frequency 1024/8=>8Hz 1024/16=>
 //Create a instance of class LSM6DS3
 LSM6DS3 myIMU(0, 0x6A); //I2C device address 0x6A
 // IMU variables
-unsigned long miliBuffer[4];
-float sensorBuffer[24];
+unsigned long miliBuffer;
+int sensorBuffer[6];
 int bufferIndex = 0;
 bool bufferOverflow = false;
 SemaphoreHandle_t bufferSemaphore;
 
 //************************ Battery ************************
+// Define battery
+
+
 const int batterySampleNum = 8;
 int batteryValues[batterySampleNum] = {0}; // buffer to store the last 10 battery readings
 int percentage; // average battery buffer
@@ -104,23 +104,17 @@ void SensorTask(void *pvParameters) {
   for (;;) { // A Task shall never return or exit.
     bufferOverflow = false; // Set overflow flag
     // Read accelerometer data
-    miliBuffer[bufferIndex] = millis();
-    sensorBuffer[(bufferIndex * 6) + bufferIndex] = myIMU.readFloatAccelX();
-    sensorBuffer[(bufferIndex * 6) + bufferIndex + 1] = myIMU.readFloatAccelY();
-    sensorBuffer[(bufferIndex * 6) + bufferIndex + 2] = myIMU.readFloatAccelZ();
+    miliBuffer = millis();
+    sensorBuffer[0] = myIMU.readRawAccelX();
+    sensorBuffer[1] = myIMU.readRawAccelY();
+    sensorBuffer[2] = myIMU.readRawAccelZ();
 
     // Read gyroscope data
-    sensorBuffer[(bufferIndex * 6) + bufferIndex + 3] = myIMU.readFloatGyroX();
-    sensorBuffer[(bufferIndex * 6) + bufferIndex + 4] = myIMU.readFloatGyroY();
-    sensorBuffer[(bufferIndex * 6) + bufferIndex + 5] = myIMU.readFloatGyroZ();
+    sensorBuffer[3] = myIMU.readRawGyroX();
+    sensorBuffer[4] = myIMU.readRawGyroY();
+    sensorBuffer[5] = myIMU.readRawGyroZ();
 
-
-
-    bufferIndex++;
-    if (bufferIndex >= 4) {
-      bufferIndex = 0;
-      bufferOverflow = true; // Set overflow flag
-      }
+    bufferOverflow = true; // Set overflow flag
 
     vTaskDelay(( ( TickType_t ) ( ( ( TickType_t ) ( baseFrequency ) * ( uint64_t ) 1024 ) / ( TickType_t ) 1000 ) )); // Delay for a period of time
   }
@@ -185,11 +179,11 @@ void ble_uart_task(void *pvParameters)
     if (bufferOverflow) {
       // Take the semaphore to ensure no conflict on buffer access
       if (xQueueSemaphoreTake( ( bufferSemaphore ), ( (TickType_t)10 ) ) == ( ( BaseType_t ) 1 )) {
-
-        unsigned long currentTime = millis();
         uint8_t buf[1000] = {0};
 
-        String timeString = String(percentage);
+        String timeString = deviceName;
+        timeString += ",";
+        timeString += String(percentage);
         timeString += "%,";
         timeString += String(myIMU.readTempC());
         timeString += "^,";
@@ -199,13 +193,10 @@ void ble_uart_task(void *pvParameters)
         timeString += "/";
         timeString += String(day);
 
-      for (int i = 0; i < 4; i++) {
-          timeString += ",";
-          timeString += String(miliBuffer[i]);
+        timeString += ",";
+        timeString += String(miliBuffer);
 
-        }
-
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 6; i++) {
           timeString += ",";
           timeString += String(sensorBuffer[i]);
         }
@@ -227,9 +218,9 @@ void ble_uart_task(void *pvParameters)
 
         // Give the semaphore back
         xQueueGenericSend( ( QueueHandle_t ) ( bufferSemaphore ), 
-# 228 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 219 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
        __null
-# 228 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 219 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
        , ( ( TickType_t ) 0U ), ( ( BaseType_t ) 0 ) );
       }
     }
@@ -290,7 +281,7 @@ void setup() {
   delay(1000);
 
   // initialize RTC
-  rtc.begin(DateTime((reinterpret_cast<const __FlashStringHelper *>(("Feb 21 2024"))), (reinterpret_cast<const __FlashStringHelper *>(("15:16:38")))));
+  rtc.begin(DateTime((reinterpret_cast<const __FlashStringHelper *>(("Mar  5 2024"))), (reinterpret_cast<const __FlashStringHelper *>(("10:44:01")))));
   // This line sets the RTC with an explicit date & time, for example to set
   rtc.adjust(DateTime(year, month, day, hour, minute, second));
 
@@ -299,71 +290,71 @@ void setup() {
 
   // Create the IMU reading task
   xTaskCreate(SensorTask, "Sensor Read", 1000, 
-# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 287 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                   __null
-# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 287 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                       , 7, 
-# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 287 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                            __null
-# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 287 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                );
   // Create the BLE send task
   xTaskCreate(ble_uart_task, "BLE UART Task", 1000, 
-# 298 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 289 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                    __null
-# 298 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 289 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                        , 5, 
-# 298 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 289 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                             __null
-# 298 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 289 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                 );
   // Create RTC task
   xTaskCreate(TaskDateTime, "RTC Task", 256, 
-# 300 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 291 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                             __null
-# 300 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 291 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                 , 7, 
-# 300 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 291 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                      __null
-# 300 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 291 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                          );
   // Create battery voltage tasks
   xTaskCreate(TaskSampleBattery, "SampleBattery", 100, 
-# 302 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 293 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                       __null
-# 302 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 293 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                           , 6, 
-# 302 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 293 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                                __null
-# 302 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 293 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                    );
   xTaskCreate(TaskDisplayBattery, "DisplayBattery", 256, 
-# 303 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 294 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                         __null
-# 303 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 294 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                             , 4, 
-# 303 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 294 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                                  __null
-# 303 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 294 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                      );
   // Create BLE receive tasks
   xTaskCreate(ble_receive_task, "BLE RE Task", 1000, 
-# 305 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                     __null
-# 305 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                         , 3, 
-# 305 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                              __null
-# 305 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 296 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                  );
   xTaskCreate(processReceivedStringTask, "Process Received String Task", 256, 
-# 306 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 297 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                                              __null
-# 306 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 297 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                                  , 1, 
-# 306 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino" 3 4
+# 297 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino" 3 4
                                                                                       __null
-# 306 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 297 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
                                                                                           );
 }
 
@@ -402,7 +393,7 @@ void startAdv(void)
    * https://developer.apple.com/library/content/qa/qa1931/_index.html   
 
    */
-# 337 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 328 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244); // in unit of 0.625 ms
   Bluefruit.Advertising.setFastTimeout(30); // number of seconds in fast mode
@@ -424,7 +415,7 @@ void setupBLE(void)
 
   Bluefruit.begin();
   Bluefruit.setTxPower(4); // Check bluefruit.h for supported values
-  Bluefruit.setName("IMU1"); // useful testing with multiple central connections getMcuUniqueID()
+  Bluefruit.setName(deviceName.c_str()); // useful testing with multiple central connections getMcuUniqueID()
   Bluefruit.Periph.setConnectCallback(connect_callback);
   Bluefruit.Periph.setDisconnectCallback(disconnect_callback);
 
@@ -471,7 +462,7 @@ void connect_callback(uint16_t conn_handle)
  * @param reason is a BLE_HCI_STATUS_CODE which can be found in ble_hci.h
 
  */
-# 401 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 392 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
 void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 {
   (void) conn_handle;
@@ -486,7 +477,7 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
   Serial.print(", reason = 0x");
 
   Serial.println(reason, HEX); */
-# 411 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\BLE_RTOS_IMU_BAT_1.ino"
+# 402 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Seeed_BLE_IMU\\BLE_RTOS_IMU_BAT_2\\BLE_RTOS_IMU_BAT_2.ino"
 }
 
 bool isInCorrectFormat(const String &str) {
