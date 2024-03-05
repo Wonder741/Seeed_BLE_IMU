@@ -12,6 +12,10 @@ UART_SERVICE_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 UART_RX_CHAR_UUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 UART_TX_CHAR_UUID = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
+# Generate a filename with the current date and time when the script starts
+current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename = f"rxdata_{current_time}.csv"
+
 # Dictionary to store connected clients and their indices
 connected_clients = {}  
 
@@ -69,10 +73,12 @@ async def main():
         with open("received_data.txt", "a") as file:
             file.write(f"{device_index}: {data}\n") """
     # Function to save received data to a CSV file
-    def save_data_to_file(device_index, data):
-        # Generate a filename with the current date and time
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = f"{device_index}_{current_time}.csv"
+    def save_data_to_file(filename, data):
+        # Write the data to the CSV file
+        with open(filename, 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            for row in data:
+                writer.writerow(row)
 
         # Write the data to a CSV file
         with open(filename, 'w', newline='') as csvfile:
@@ -93,8 +99,8 @@ async def main():
         data_str = data.decode('utf-8')  # Convert bytearray to string
         data_rows = [row.split(',') for row in data_str.split('\n')]  # Split the data into rows and columns
 
-        # Save the processed data to a CSV file
-        save_data_to_file(device_index, data_rows)
+        # Save the processed data to the CSV file
+        save_data_to_file(filename, data_rows)
     
     # Connect to the selected devices and set up notifications and data handling
     connected_clients = {}  # Initialize as a dictionary
