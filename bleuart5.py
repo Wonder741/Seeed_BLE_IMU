@@ -87,7 +87,7 @@ async def main():
         save_data_to_file(device_index, data) """
     def handle_rx(index, _, data: bytearray):
         device_index = connected_clients.get(index, "Unknown")
-        print(f"Received from device {device_index}:", data)
+        #print(f"Received from device {device_index}:", data)
 
         # Process the bytearray to extract the data
         data_str = data.decode('utf-8')  # Convert bytearray to string
