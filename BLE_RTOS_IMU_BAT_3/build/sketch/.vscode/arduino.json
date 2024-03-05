@@ -1,0 +1,8 @@
+#line 1 "C:\\Users\\uqcwan34\\OneDrive - The University of Queensland\\Documents\\GitHub\\Smart_orthotics_hardware\\BLE_RTOS_IMU_BAT_1\\.vscode\\arduino.json"
+{
+    "configuration": "softdevice=s140v6,debug=l0",
+    "board": "Seeeduino:nrf52:xiaonRF52840",
+    "programmer": "nrfutil_boot",
+    "sketch": "BLE_RTOS_IMU_BAT_1.ino",
+    "output": "build"
+}
