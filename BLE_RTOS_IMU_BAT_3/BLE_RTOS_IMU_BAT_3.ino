@@ -5,12 +5,11 @@
 #include "Wire.h"
 
 //Device name
-String deviceName = "IMU2";
+String deviceName = "IMU1";
 
 //************************ Signal ************************
 // Base frequency for D8
-const int baseFrequency = 1024 / 8;  // One frame frequency 1024/8=>8Hz 1024/16=>16Hz
-                                     // Sample frequency    8*4=32Hz    16*4=64Hz       
+const int baseFrequency = 1024 / 32;  // One frame frequency 1024/8=>8Hz 1024/16=>16Hz     1024/32=>32Hz 
 //Create a instance of class LSM6DS3
 LSM6DS3 myIMU(I2C_MODE, 0x6A);    //I2C device address 0x6A
 // IMU variables
@@ -130,7 +129,7 @@ void TaskSampleBattery(void *pvParameters) {
     // Move to the next index, wrapping around if necessary
     currentSampleIndex = (currentSampleIndex + 1) % batterySampleNum;
     // Delay for next sample based on the defined sample rate
-    vTaskDelay(pdMS_TO_TICKS(baseFrequency));
+    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 8));
   }
 }
 
@@ -151,7 +150,7 @@ void TaskDisplayBattery(void *pvParameters) {
     percentage = getBatteryPercentage(batteryvalue);
     
     // Delay until it's time to display again
-    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 8));
+    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 64));
   }
 } 
 
@@ -186,11 +185,17 @@ void ble_uart_task(void *pvParameters)
         timeString += "%,";
         timeString += String(myIMU.readTempC());
         timeString += "^,";
-        timeString += String(year);
-        timeString += "/";
-        timeString += String(month);
-        timeString += "/";
-        timeString += String(day);
+        // timeString += String(year);
+        // timeString += "/";
+        // timeString += String(month);
+        // timeString += "/";
+        // timeString += String(day);
+        // timeString += ",";
+        timeString += String(hour);
+        timeString += ":";
+        timeString += String(minute);
+        timeString += ":";
+        timeString += String(second);
 
         timeString += ",";
         timeString += String(miliBuffer);

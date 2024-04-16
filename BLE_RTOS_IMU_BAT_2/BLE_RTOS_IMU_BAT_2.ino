@@ -5,17 +5,17 @@
 #include "Wire.h"
 
 //Device name
-String deviceName = "IMU2";
+String deviceName = "IMU4";
+unsigned long startTime = 0;
 
 //************************ Signal ************************
 // Base frequency for D8
-const int baseFrequency = 1024 / 8;  // One frame frequency 1024/8=>8Hz 1024/16=>16Hz
-                                     // Sample frequency    8*4=32Hz    16*4=64Hz       
+const int baseFrequency = 30;  // One frame frequency 1024/8=>8Hz 1024/16=>16Hz   
 //Create a instance of class LSM6DS3
 LSM6DS3 myIMU(I2C_MODE, 0x6A);    //I2C device address 0x6A
 // IMU variables
-unsigned long miliBuffer;
-int sensorBuffer[6];
+unsigned long miliBuffer[5];
+int sensorBuffer[30];
 int bufferIndex = 0;
 bool bufferOverflow = false;
 SemaphoreHandle_t bufferSemaphore;
@@ -81,7 +81,7 @@ BLEBas  blebas;  // battery
 char central_name_global[32] = { 0 };
 String receivedString;         // Variable to store the received string
 String lastProcessedString;    // Variable to store the last processed string
-
+volatile bool bleConnected = false;
 
 // This function updates the software-based clock every second
 void updateClock() 
@@ -101,20 +101,25 @@ void SensorTask(void *pvParameters) {
   (void) pvParameters;
 
   for (;;) { // A Task shall never return or exit.
+      if (bleConnected){
     bufferOverflow = false; // Set overflow flag
     // Read accelerometer data
-    miliBuffer = millis();
-    sensorBuffer[0] = myIMU.readRawAccelX();
-    sensorBuffer[1] = myIMU.readRawAccelY();
-    sensorBuffer[2] = myIMU.readRawAccelZ();
+    miliBuffer[bufferIndex] = millis() - startTime;
+    sensorBuffer[(bufferIndex * 6)] = myIMU.readRawAccelX();
+    sensorBuffer[(bufferIndex * 6) + 1] = myIMU.readRawAccelY();
+    sensorBuffer[(bufferIndex * 6) + 2] = myIMU.readRawAccelZ();
 
     // Read gyroscope data
-    sensorBuffer[3] = myIMU.readRawGyroX();
-    sensorBuffer[4] = myIMU.readRawGyroY();
-    sensorBuffer[5] = myIMU.readRawGyroZ();
+    sensorBuffer[(bufferIndex * 6) + 3] = myIMU.readRawGyroX();
+    sensorBuffer[(bufferIndex * 6) + 4] = myIMU.readRawGyroY();
+    sensorBuffer[(bufferIndex * 6) + 5] = myIMU.readRawGyroZ();
 
-    bufferOverflow = true; // Set overflow flag
-
+    bufferIndex++;
+    if (bufferIndex >= 5) {
+      bufferIndex = 0;
+      bufferOverflow = true; // Set overflow flag
+      }
+    }
     vTaskDelay(pdMS_TO_TICKS(baseFrequency)); // Delay for a period of time
   }
 }
@@ -125,12 +130,14 @@ void TaskSampleBattery(void *pvParameters) {
   (void) pvParameters;
 
   for (;;) {
+        if (bleConnected){
     // Sample the ADC value
     batteryValues[currentSampleIndex] = analogRead(PIN_VBAT);
     // Move to the next index, wrapping around if necessary
     currentSampleIndex = (currentSampleIndex + 1) % batterySampleNum;
     // Delay for next sample based on the defined sample rate
-    vTaskDelay(pdMS_TO_TICKS(baseFrequency));
+        }
+    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 1000));
   }
 }
 
@@ -151,7 +158,7 @@ void TaskDisplayBattery(void *pvParameters) {
     percentage = getBatteryPercentage(batteryvalue);
     
     // Delay until it's time to display again
-    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 8));
+    vTaskDelay(pdMS_TO_TICKS(baseFrequency * 8000));
   }
 } 
 
@@ -174,6 +181,7 @@ void ble_uart_task(void *pvParameters)
     (void) pvParameters; // Just to avoid compiler warnings
 
   for (;;) {
+        if (bleConnected){
     // Wait for the overflow flag to be set
     if (bufferOverflow) {
       // Take the semaphore to ensure no conflict on buffer access
@@ -182,25 +190,31 @@ void ble_uart_task(void *pvParameters)
 
         String timeString = deviceName;
         timeString += ",";
-        timeString += String(percentage);
-        timeString += "%,";
-        timeString += String(myIMU.readTempC());
-        timeString += "^,";
-        timeString += String(year);
-        timeString += "/";
-        timeString += String(month);
-        timeString += "/";
-        timeString += String(day);
+        //timeString += String(percentage);
+        //timeString += "%,";
+        //timeString += String(myIMU.readTempC());
+        //timeString += "^,";
+        // timeString += String(year);
+        // timeString += "/";
+        // timeString += String(month);
+        // timeString += "/";
+        // timeString += String(day);
+        // timeString += ",";
+        timeString += String(hour);
+        timeString += ":";
+        timeString += String(minute);
+        timeString += ":";
+        timeString += String(second);
 
-        timeString += ",";
-        timeString += String(miliBuffer);
+        for (int i = 0; i < 5; i++) {
+            timeString += ",";
+            timeString += String(miliBuffer[i]);
+          }
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 30; i++) {
           timeString += ",";
           timeString += String(sensorBuffer[i]);
         }
-
-        timeString += "@";
 
         int count1 = timeString.length();
         //Serial.println(count1);
@@ -219,6 +233,7 @@ void ble_uart_task(void *pvParameters)
         xSemaphoreGive(bufferSemaphore);
       }
     }
+        }
     
     // Slight delay to prevent this task from hogging the CPU
     vTaskDelay(pdMS_TO_TICKS(baseFrequency));
@@ -252,6 +267,7 @@ void processReceivedStringTask(void *pvParameters) {
 
                 DateTime newTime(year, month, day, hour, minute, second);
                 rtc.adjust(newTime);
+                startTime = millis();
             }
             
             lastProcessedString = receivedString;
@@ -284,16 +300,16 @@ void setup() {
   bufferSemaphore = xSemaphoreCreateMutex();
 
   // Create the IMU reading task
-  xTaskCreate(SensorTask,    "Sensor Read", 1000,  NULL, 7, NULL);
+  xTaskCreate(SensorTask,    "Sensor Read", 1000,  NULL, 6, NULL);
   // Create the BLE send task
-  xTaskCreate(ble_uart_task, "BLE UART Task", 1000, NULL, 5, NULL);
+  xTaskCreate(ble_uart_task, "BLE UART Task", 1000, NULL, 7, NULL);
   // Create RTC task
-  xTaskCreate(TaskDateTime, "RTC Task", 256, NULL, 7, NULL); 
+  xTaskCreate(TaskDateTime, "RTC Task", 256, NULL, 4, NULL); 
   // Create battery voltage tasks
-  xTaskCreate(TaskSampleBattery, "SampleBattery", 100, NULL, 6, NULL);
-  xTaskCreate(TaskDisplayBattery, "DisplayBattery", 256, NULL, 4, NULL);
+  //xTaskCreate(TaskSampleBattery, "SampleBattery", 100, NULL, 3, NULL);
+  //xTaskCreate(TaskDisplayBattery, "DisplayBattery", 256, NULL, 2, NULL);
   // Create BLE receive tasks
-  xTaskCreate(ble_receive_task, "BLE RE Task", 1000, NULL, 3, NULL);
+  xTaskCreate(ble_receive_task, "BLE RE Task", 1000, NULL, 5, NULL);
   xTaskCreate(processReceivedStringTask, "Process Received String Task", 256, NULL, 1, NULL);
 }
 
@@ -382,6 +398,7 @@ void connect_callback(uint16_t conn_handle)
   Serial.println(central_name);
 
   strncpy(central_name_global, central_name, 32);
+  bleConnected = true;
 }
 
 /**
@@ -393,6 +410,7 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 {
   (void) conn_handle;
   (void) reason;
+  bleConnected = false;
 
 /*   Serial.println();
   Serial.print("Disconnected from ");

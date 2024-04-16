@@ -1,0 +1,7 @@
+{
+    "configuration": "softdevice=s140v6,debug=l0",
+    "board": "Seeeduino:nrf52:xiaonRF52840Sense",
+    "programmer": "nrfutil_boot",
+    "port": "COM1",
+    "sketch": "BLE_RTOS_IMU_BAT_2.ino"
+}
